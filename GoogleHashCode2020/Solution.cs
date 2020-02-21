@@ -22,6 +22,7 @@ namespace GoogleHashCode2020
             this.SaveToFile(this.SavePath);
         }
 
+        private Book[] Books { get; set; }
         private Library[] Libraries { get; set; }
         private int NumberOfDaysForScanning { get; set; }
 
@@ -55,7 +56,7 @@ namespace GoogleHashCode2020
                     daysRemainingToProcessLibrary = libraryInProcess.DaysToSignUp;
                 }
 
-                foreach (Library item in this.UsedLibraries.OrderByDescending(x => x.TotalScore))
+                foreach (Library item in this.UsedLibraries)
                 {
                     item.ChooseBooks();
                 }
@@ -63,7 +64,7 @@ namespace GoogleHashCode2020
                 if (libraryInProcess != null)
                 {
                     daysRemainingToProcessLibrary--;
-                }                
+                }
             }
         }
 
@@ -122,15 +123,33 @@ namespace GoogleHashCode2020
                     this.Libraries[i] = library;
                 }
                 #endregion
+
+                this.Books = globalBooks;
             }
         }
         private void SaveToFile(string path)
         {
+            IEnumerable<Library> filteredLibraries = this.UsedLibraries.Where(x => x.SentBooks.Count > 0);
+            int numberOfFilteredLibraries = filteredLibraries.Count();
+
+            lock (this)
+            {
+                Console.WriteLine($"Total number of libraries:    {this.Libraries.Length}");
+                Console.WriteLine($"- Number of used libraries:   {this.UsedLibraries.Count} ({this.UsedLibraries.Count / (double)this.Libraries.Length * 100}%)");
+                Console.WriteLine($"- Number of really libraries: {numberOfFilteredLibraries} ({numberOfFilteredLibraries / (double)this.Libraries.Length * 100}%)");
+
+                int sentBooksCount = this.UsedLibraries.Sum(x => x.SentBooks.Count);
+                Console.WriteLine($"- Total number of books:   {this.Books.Length}");
+                Console.WriteLine($"- Number of scanned books: {sentBooksCount} ({sentBooksCount / (double)this.Books.Length * 100}%)");
+                int myScore = this.Books.Where(x => x.IsScanned).Sum(x => x.Score);
+                int maxScore = this.Books.Sum(x => x.Score);
+                Console.WriteLine($"- Score: {myScore}/{maxScore} ({myScore/(double)maxScore*100}%)");
+                Console.WriteLine("\n");
+            }
+
             using (StreamWriter writer = new StreamWriter(path, false))
             {
-                IEnumerable<Library> filteredLibraries = this.UsedLibraries.Where(x => x.SentBooks.Count > 0);
-
-                writer.WriteLine(filteredLibraries.Count());
+                writer.WriteLine(numberOfFilteredLibraries);
 
                 foreach (Library library in filteredLibraries)
                 {
@@ -142,7 +161,7 @@ namespace GoogleHashCode2020
                     if (library.SentBooks.Count > 0)
                     {
                         writer.WriteLine();
-                    }                    
+                    }
                 }
             }
         }

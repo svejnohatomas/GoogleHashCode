@@ -34,6 +34,7 @@ namespace GoogleHashCode2020
             foreach (Thread item in threads)
             {
                 item.Start();
+                while (item.IsAlive) { }
             }
 
             while (threads.Any(x => x.IsAlive))
