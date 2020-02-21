@@ -25,6 +25,7 @@ namespace GoogleHashCode2020
         {
             this.Libraries = this.Libraries.OrderBy(x => x.DaysToSignUp).ThenByDescending(x => x.Books.Sum(b => b.Score)).ToArray();
         }
+
         private void Process()
         {
             int identity = 0;
@@ -45,7 +46,7 @@ namespace GoogleHashCode2020
                     daysRemainingToProcessLibrary = libraryInProcess.DaysToSignUp;
                 }
 
-                foreach (Library item in this.UsedLibraries)
+                foreach (Library item in this.UsedLibraries.OrderByDescending(x => x.TotalScore))
                 {
                     item.ChooseBooks();
                 }
@@ -106,6 +107,7 @@ namespace GoogleHashCode2020
                     foreach (Book item in libraryBooks.OrderByDescending(x => x.Score))
                     {
                         library.Books.Enqueue(item);
+                        library.TotalScore += item.Score;
                     }
 
                     this.Libraries[i] = library;

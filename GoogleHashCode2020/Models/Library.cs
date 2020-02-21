@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GoogleHashCode2020.Models
 {
@@ -18,6 +19,7 @@ namespace GoogleHashCode2020.Models
         public Queue<Book> Books { get; private set; }
 
         public Queue<Book> SentBooks { get; private set; } = new Queue<Book>();
+        public int TotalScore { get; set; }
 
         public void ChooseBooks()
         {
@@ -32,6 +34,8 @@ namespace GoogleHashCode2020.Models
                     this.SentBooks.Enqueue(book);
                     chosenBooksCount++;
                 }
+
+                this.TotalScore -= book.Score;
             }
         }
     }

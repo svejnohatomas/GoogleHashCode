@@ -16,13 +16,12 @@ namespace GoogleHashCode2020
                 "e_so_many_books",
                 "f_libraries_of_the_world"
             };
-            string inputRoot = @"C:\Users\Tomas\Documents\GitHub\SwanseaCompSci\GoogleHashCode\GoogleHashCode2020\input";
-            string outputRoot = @"C:\Users\Tomas\Documents\GitHub\SwanseaCompSci\GoogleHashCode\GoogleHashCode2020\output";
+            string root = @"C:\Users\Tomas\Documents\GitHub\svejnohatomas\GoogleHashCode\GoogleHashCode2020";
 
             foreach (string item in inputFiles)
             {
-                string loadPath = $@"{inputRoot}\{item}.txt";
-                string savePath = $@"{outputRoot}\output_{item}.txt";
+                string loadPath = $@"{root}\input\{item}.txt";
+                string savePath = $@"{root}\output\output_{item}.txt";
                 _ = new Solution(loadPath, savePath);
             }
 
