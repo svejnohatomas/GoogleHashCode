@@ -119,9 +119,11 @@ namespace GoogleHashCode2020
         {
             using (StreamWriter writer = new StreamWriter(path, false))
             {
-                writer.WriteLine(this.UsedLibraries.Count);
+                IEnumerable<Library> filteredLibraries = this.UsedLibraries.Where(x => x.SentBooks.Count > 0);
 
-                foreach (Library library in this.UsedLibraries)
+                writer.WriteLine(filteredLibraries.Count());
+
+                foreach (Library library in filteredLibraries)
                 {
                     writer.WriteLine($"{library.Id} {library.SentBooks.Count}");
                     foreach (Book book in library.SentBooks)
