@@ -10,20 +10,29 @@ namespace GoogleHashCode2020
     {
         public Solution(string loadPath, string savePath)
         {
-            this.LoadFile(loadPath);
+            this.LoadPath = loadPath;
+            this.SavePath = savePath;
+        }
+
+        public void Start()
+        {
+            this.LoadFile(this.LoadPath);
             this.SortLibraries();
             this.Process();
-            this.SaveToFile(savePath);
+            this.SaveToFile(this.SavePath);
         }
 
         private Library[] Libraries { get; set; }
         private int NumberOfDaysForScanning { get; set; }
 
         private LinkedList<Library> UsedLibraries { get; set; } = new LinkedList<Library>();
+        public string LoadPath { get; }
+        public string SavePath { get; }
 
         private void SortLibraries()
         {
-            this.Libraries = this.Libraries.OrderBy(x => x.DaysToSignUp).ThenByDescending(x => x.Books.Sum(b => b.Score)).ToArray();
+            //TODO: Figure out a better solution
+            this.Libraries = this.Libraries.OrderBy(x => x.DaysToSignUp).ThenByDescending(x => x.TotalScore).ToArray();
         }
 
         private void Process()

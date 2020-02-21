@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 
 namespace GoogleHashCode2020
 {
@@ -18,11 +20,25 @@ namespace GoogleHashCode2020
             };
             string root = @"C:\Users\Tomas\Documents\GitHub\svejnohatomas\GoogleHashCode\GoogleHashCode2020";
 
-            foreach (string item in inputFiles)
+            Thread[] threads = new Thread[inputFiles.Length];
+
+            for (int i = 0; i < inputFiles.Length; i++)
             {
+                string item = inputFiles[i];
                 string loadPath = $@"{root}\input\{item}.txt";
                 string savePath = $@"{root}\output\output_{item}.txt";
-                _ = new Solution(loadPath, savePath);
+                Solution solution = new Solution(loadPath, savePath);
+                threads[i] = new Thread(new ThreadStart(solution.Start));
+            }
+
+            foreach (Thread item in threads)
+            {
+                item.Start();
+            }
+
+            while (threads.Any(x => x.IsAlive))
+            {
+
             }
 
             DateTime endTime = DateTime.UtcNow;
