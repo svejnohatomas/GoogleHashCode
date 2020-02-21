@@ -44,7 +44,8 @@ namespace GoogleHashCode2020
 
             DateTime endTime = DateTime.UtcNow;
 
-            Console.WriteLine(endTime - startTime);
+            Console.WriteLine($"Runtime: {endTime - startTime}");
+            Console.WriteLine($"Score: {Solution.Score} / {Solution.MaxScore} ({Solution.Score / (double)Solution.MaxScore} %)");
         }
     }
 }

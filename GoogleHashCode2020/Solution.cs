@@ -8,6 +8,10 @@ namespace GoogleHashCode2020
 {
     public class Solution
     {
+        private static object LockObject { get; set; } = new object();
+        public static int MaxScore { get; private set; }
+        public static int Score { get; private set; }
+
         public Solution(string loadPath, string savePath)
         {
             this.LoadPath = loadPath;
@@ -132,19 +136,21 @@ namespace GoogleHashCode2020
             IEnumerable<Library> filteredLibraries = this.UsedLibraries.Where(x => x.SentBooks.Count > 0);
             int numberOfFilteredLibraries = filteredLibraries.Count();
 
-            lock (this)
+            lock (LockObject)
             {
                 Console.WriteLine($"Total number of libraries:    {this.Libraries.Length}");
-                Console.WriteLine($"- Number of used libraries:   {this.UsedLibraries.Count} ({this.UsedLibraries.Count / (double)this.Libraries.Length * 100}%)");
-                Console.WriteLine($"- Number of really libraries: {numberOfFilteredLibraries} ({numberOfFilteredLibraries / (double)this.Libraries.Length * 100}%)");
+                Console.WriteLine($"- Number of used libraries:   {this.UsedLibraries.Count} ({this.UsedLibraries.Count / (double)this.Libraries.Length * 100} %)");
+                Console.WriteLine($"- Number of really libraries: {numberOfFilteredLibraries} ({numberOfFilteredLibraries / (double)this.Libraries.Length * 100} %)");
 
                 int sentBooksCount = this.UsedLibraries.Sum(x => x.SentBooks.Count);
                 Console.WriteLine($"- Total number of books:   {this.Books.Length}");
-                Console.WriteLine($"- Number of scanned books: {sentBooksCount} ({sentBooksCount / (double)this.Books.Length * 100}%)");
-                int myScore = this.Books.Where(x => x.IsScanned).Sum(x => x.Score);
+                Console.WriteLine($"- Number of scanned books: {sentBooksCount} ({sentBooksCount / (double)this.Books.Length * 100} %)");
+                int score = this.Books.Where(x => x.IsScanned).Sum(x => x.Score);
                 int maxScore = this.Books.Sum(x => x.Score);
-                Console.WriteLine($"- Score: {myScore}/{maxScore} ({myScore/(double)maxScore*100}%)");
-                Console.WriteLine("\n");
+                Console.WriteLine($"- Score: {score}/{maxScore} ({score / (double)maxScore*100} %)\n\n");
+
+                MaxScore += maxScore;
+                Score += score;
             }
 
             using (StreamWriter writer = new StreamWriter(path, false))
