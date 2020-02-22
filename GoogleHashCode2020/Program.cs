@@ -45,7 +45,8 @@ namespace GoogleHashCode2020
             DateTime endTime = DateTime.UtcNow;
 
             Console.WriteLine($"Runtime: {endTime - startTime}");
-            Console.WriteLine($"Score: {Solution.Score} / {Solution.MaxScore} ({Solution.Score / (double)Solution.MaxScore} %)");
+            double percentage = Solution.Score / (double)Solution.MaxScore * 100;
+            Console.WriteLine($"Score: {Solution.Score} / {Solution.MaxScore} ({Math.Round(percentage, 2, MidpointRounding.AwayFromZero)} %)");
         }
     }
 }
