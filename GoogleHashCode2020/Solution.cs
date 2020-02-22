@@ -129,7 +129,7 @@ namespace GoogleHashCode2020
                         libraryBooks.Add(globalBooks[id]);
                     }
 
-                    foreach (Book item in libraryBooks.OrderByDescending(x => x.Score))
+                    foreach (Book item in libraryBooks)
                     {
                         library.Books.Enqueue(item);
                         library.TotalScore += item.Score;
