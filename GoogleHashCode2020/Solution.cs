@@ -37,7 +37,18 @@ namespace GoogleHashCode2020
         private void SortLibraries()
         {
             //TODO: Figure out a better solution
-            this.Libraries = this.Libraries.OrderBy(x => x.DaysToSignUp).ThenByDescending(x => x.TotalScore).ToArray();
+
+            // (__ - 11.02 %)
+            // this.Libraries = this.Libraries.OrderByDescending(x => x.TotalScore).ToArray();
+
+            // (__ - 22.28 %)
+            // this.Libraries = this.Libraries.OrderByDescending(x => x.ScanLimitPerDay / (double)x.DaysToSignUp).ToArray();
+
+            // (16 - 24.10%) 
+            // this.Libraries = this.Libraries.OrderBy(x => x.DaysToSignUp).ThenByDescending(x => x.TotalScore).ToArray();
+
+            // (17 - 26.02 %)
+            this.Libraries = this.Libraries.OrderByDescending(x => x.ScanLimitPerDay / (double) x.DaysToSignUp * x.Books.Count).ToArray();
         }
 
         private void Process()
