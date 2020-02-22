@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GoogleHashCode2020.Models
@@ -37,6 +38,25 @@ namespace GoogleHashCode2020.Models
 
                 this.TotalScore -= book.Score;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startDay">An Id of a day when we start the sign-up process.</param>
+        /// <returns></returns>
+        public int NumberOfBooksWeCanRegisterFromDay(int daysToRegister, int startDay = 0)
+        {
+            int remainingDays = daysToRegister - startDay - this.DaysToSignUp;
+
+            return Math.Min(remainingDays * this.ScanLimitPerDay, this.Books.Count);
+        }
+        public int ScoreOfBooksWeCanRegisterFromDay(int daysToRegister, int startDay = 0)
+        {
+            int numberOfBooks = this.NumberOfBooksWeCanRegisterFromDay(daysToRegister, startDay);
+
+            // TODO: Change Data Structure to List and use index to indicate the current position
+            return this.Books.Take(numberOfBooks).Sum(x => x.Score);
         }
     }
 }
