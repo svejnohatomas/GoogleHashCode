@@ -15,7 +15,7 @@ foreach (var file in files)
     Console.WriteLine($"- Number of projects: {input.Projects.Count}");
     Console.WriteLine($"- Number of contributors: {input.Contributors.Count}\n");
 
-    Computer.Compute(input);
+    new Computer().Compute(input);
 
     new Dumper().Dump(input, file);
 }

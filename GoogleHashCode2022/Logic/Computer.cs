@@ -28,6 +28,8 @@ namespace GoogleHashCode2022.Logic
                         {
                             contributor.Projects.AddLast(project);
                         }
+
+                        project.StartDay = day;
                     }
                 }
             }
@@ -60,7 +62,7 @@ namespace GoogleHashCode2022.Logic
 
                 var roleContributors = contributors
                     .Where(x => x.IsInProject(project) == false)
-                    .OrderByDescending(x => GetContributorScore(x, skillName, skillLevel))
+                    .OrderByDescending(x => GetContributorScore(x, skillName, skillLevel));
 
                 if (roleContributors is null)
                 {
