@@ -17,6 +17,23 @@
         public int BestBefore { get; }
         public List<Tuple<string, int>> RequiredContributorRoles { get; set; }
 
+        public int LatestDateStart() => BestBefore - Duration;
+        public int MaxScore(int startDay)
+        {
+            return startDay + Duration - 1 < BestBefore
+                ? Score
+                : Score - ((startDay + Duration - 1) - BestBefore + 1);
+        }
+
+        public int? StartDay { get; set; }
+
+        public bool IsProjectEndDay(int day)
+        {
+            return StartDay.HasValue
+                ? day == StartDay.Value + Duration
+                : false;
+        }
+
         public LinkedList<Contributor> Contributors { get; set; } = new LinkedList<Contributor>();
     }
 }
