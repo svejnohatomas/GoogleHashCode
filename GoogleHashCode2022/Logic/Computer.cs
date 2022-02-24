@@ -58,17 +58,23 @@ namespace GoogleHashCode2022.Logic
                 var skillName = role.Item1;
                 var skillLevel = role.Item2;
 
-                var roleContributor = contributors
+                var roleContributors = contributors
                     .Where(x => x.IsInProject(project) == false)
                     .OrderByDescending(x => GetContributorScore(x, skillName, skillLevel))
-                    .FirstOrDefault(x => GetContributorScore(x, skillName, skillLevel) > 0);
 
-                if (roleContributor is null)
+                if (roleContributors is null)
                 {
                     return null;
                 }
 
-                resultContributors.AddLast(roleContributor);
+                if (roleContributors.Any() && GetContributorScore(roleContributors.First(), skillName, skillLevel) > 0)
+                {
+                    resultContributors.AddLast(roleContributors.First());
+                } 
+                else
+                {
+                    return null;
+                }
             }
 
             return resultContributors;
